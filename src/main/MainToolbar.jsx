@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef , useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,6 +13,8 @@ import TuneIcon from '@mui/icons-material/Tune';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useDeviceReadonly } from '../common/util/permissions';
 import DeviceRow from './DeviceRow';
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveDialog from '../common/components/RemoveDialog';
 
 const useStyles = makeStyles()((theme) => ({
   toolbar: {
@@ -40,6 +42,10 @@ const MainToolbar = ({
   setFilterSort,
   filterMap,
   setFilterMap,
+  selectedDevices = [],
+  handleRemoveResult,
+  removing,
+  setRemoving,
 }) => {
   const { classes } = useStyles();
   const theme = useTheme();
@@ -56,9 +62,22 @@ const MainToolbar = ({
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [devicesAnchorEl, setDevicesAnchorEl] = useState(null);
 
+  const handleRemove = () => {
+    if (selectedDevices.length > 0) {
+      setRemoving(true);
+     }
+   };
+
+    useEffect(() => {
+      if (selectedDevices.length === 0 && removing) {
+        setRemoving(false);
+      }
+    }, [selectedDevices, removing]);
+
   const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
 
   return (
+    <>
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
         {devicesOpen ? <MapIcon /> : <DnsIcon />}
@@ -174,7 +193,27 @@ const MainToolbar = ({
           <AddIcon />
         </Tooltip>
       </IconButton>
-    </Toolbar>
+        {selectedDevices?.length > 0 && (
+        <IconButton edge="end" onClick={handleRemove} disabled={!selectedDevices || selectedDevices.length === 0} >
+          <Tooltip title={t('deviceDeleteSelected')} arrow>
+            <DeleteIcon />
+          </Tooltip>
+        </IconButton>
+        )}
+        </Toolbar>
+        {removing && (
+         <RemoveDialog
+            open={removing}
+            endpoint="devices"
+            itemId={selectedDevices.length === 1 ? selectedDevices[0] : null}
+            itemIds={selectedDevices.length > 1 ? selectedDevices : []}
+            onResult={() => {
+            handleRemoveResult(); 
+            setRemoving(false);
+            }}
+          />
+         )}    
+      </>
   );
 };
 
