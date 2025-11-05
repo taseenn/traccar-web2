@@ -75,6 +75,10 @@ const useStyles = makeStyles()((theme) => ({
       marginTop: theme.spacing(1),
     },
   },
+  distance : {
+    display: 'flex',
+    justifyContent: 'space-between',
+  }
 }));
 
 const ReplayPage = () => {
@@ -95,6 +99,7 @@ const ReplayPage = () => {
   const to = searchParams.get('to');
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [totalDistance, setTotalDistance] = useState(0);
 
   const loaded = Boolean(from && to && !loading && positions.length);
 
@@ -154,15 +159,29 @@ const ReplayPage = () => {
       if (!positions.length) {
         throw Error(t('sharedNoData'));
       }
-    } finally {
-      setLoading(false);
-    }
+       let totalDistance = 0;
+       for (let i = 0; i < positions.length; i++) {
+       totalDistance += positions[i].attributes.distance || 0;
+   }
+      setTotalDistance(totalDistance);
+      } finally {
+        setLoading(false);
+      }
   });
 
   const handleDownload = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
+    let distanceText = '';
+    if (index > 0 && positions[index]) {
+    const distance = positions[index].attributes.distance || 0;
+    if (distance < 1000) {
+      distanceText = `${distance.toFixed(1)} m`;
+    } else {
+      distanceText = `${(distance / 1000).toFixed(2)} km`;
+    } 
+  }
 
   return (
     <div className={classes.root}>
@@ -198,7 +217,14 @@ const ReplayPage = () => {
         <Paper className={classes.content} square>
           {loaded ? (
             <>
-              <Typography variant="subtitle1" align="center">{deviceName}</Typography>
+        <div className={classes.distance}>
+        <Typography variant="subtitle1" align="center">
+          {deviceName}
+          </Typography>
+          {totalDistance < 1000
+            ? `${totalDistance.toFixed(1)} m`
+            : `${(totalDistance / 1000).toFixed(2)} km`}
+        </div>
               <Slider
                 className={classes.slider}
                 max={positions.length - 1}
@@ -219,6 +245,12 @@ const ReplayPage = () => {
                   <FastForwardIcon />
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds')}
+              </div>
+              <div className={classes.distance}>
+                <Typography variant="subtitle1">Position Distance</Typography>
+                {distanceText && (
+                  <Typography variant="subtitle1">{distanceText} </Typography>
+                )} 
               </div>
             </>
           ) : (
