@@ -61,6 +61,7 @@ import { generateLoginToken } from './common/components/NativeInterface';
 import { useLocalization } from './common/components/LocalizationProvider';
 import fetchOrThrow from './common/util/fetchOrThrow';
 import AuditPage from './reports/AuditPage';
+import XmlFile from './main/XmlFile.jsx';
 
 const Navigation = () => {
   const dispatch = useDispatch();
@@ -149,6 +150,7 @@ const Navigation = () => {
           <Route path="driver" element={<DriverPage />} />
           <Route path="geofence/:id" element={<GeofencePage />} />
           <Route path="geofence" element={<GeofencePage />} />
+          <Route path="xml" element={<XmlFile />} />
           <Route path="groups" element={<GroupsPage />} />
           <Route path="group/:id/connections" element={<GroupConnectionsPage />} />
           <Route path="group/:id/command" element={<CommandGroupPage />} />

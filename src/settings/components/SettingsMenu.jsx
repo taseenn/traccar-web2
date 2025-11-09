@@ -15,6 +15,7 @@ import DnsIcon from '@mui/icons-material/Dns';
 import HelpIcon from '@mui/icons-material/Help';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import ArticleIcon from '@mui/icons-material/Article';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -72,6 +73,12 @@ const SettingsMenu = () => {
               link="/geofences"
               icon={<DrawIcon />}
               selected={location.pathname.startsWith('/settings/geofence')}
+            />
+            <MenuItem
+              title="XmlFile"
+              link="/settings/xml"
+              icon={<ArticleIcon />}
+              selected={location.pathname === '/settings/xml'}
             />
             {!features.disableGroups && (
               <MenuItem
