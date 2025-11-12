@@ -12,7 +12,7 @@ class StorageControl {
     this.button.style.padding = "6px";
     this.button.style.fontSize = "15px";
     this.button.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <path d="M3 6h18l-2 8H5L3 6zm2 10h14v2H5v-2z" />
       </svg>
     `;
@@ -31,16 +31,17 @@ class StorageControl {
     this.popup.style.right = "110%";
     this.popup.style.top = "50%";
     this.popup.style.transform = "translateY(-50%)";
-    this.popup.style.background = "#fff";
+    this.popup.style.background = "rgba(2,12,27,0.8)"; 
     this.popup.style.padding = "14px 18px";
-    this.popup.style.borderRadius = "10px";
-    this.popup.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.25)";
+    this.popup.style.borderRadius = "2px";
+    this.popup.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.35)";
     this.popup.style.fontSize = "13px";
     this.popup.style.zIndex = "9999";
     this.popup.style.minWidth = "160px";
     this.popup.style.opacity = "0";
     this.popup.style.transition = "opacity 0.25s ease";
     this.popup.style.textAlign = "center";
+    // this.popup.style.color = "#e3f2fd";
 
     this.container.appendChild(this.popup);
 
@@ -55,22 +56,22 @@ class StorageControl {
     const { percent } = await this.getStorage();
 
     const color =
-      percent > 80 ? "#d32f2f" :
-      percent > 50 ? "#ed6c02" :
-                     "#1976d2"; 
+      percent > 80 ? "#ef5350" :    // High
+      percent > 50 ? "#ffa726" :    // Medium
+                     "#26c6da";     // Low
 
     const radius = 28;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (percent / 100) * circumference;
 
     this.popup.innerHTML = `
-      <div style="font-weight: 600; margin-bottom: 10px; color: #1976d2;">
+      <div style="font-weight: 600; margin-bottom: 10px; color: #e3f2fd;">
         Storage Usage
       </div>
 
       <div style="display: flex; justify-content: center;">
         <svg width="80" height="80">
-          <circle cx="40" cy="40" r="${radius}" stroke="#E5EAF2" stroke-width="6" fill="none"></circle>
+          <circle cx="40" cy="40" r="${radius}" stroke="#345" stroke-width="6" fill="none"></circle>
           <circle
             cx="40" cy="40" r="${radius}"
             stroke="${color}"

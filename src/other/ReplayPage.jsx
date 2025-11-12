@@ -51,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
   },
   slider: {
     width: '100%',
+    color: theme.palette.secondary.main,
   },
   controls: {
     display: 'flex',
@@ -77,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
   },
   distance : {
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
   }
 }));
@@ -224,6 +226,10 @@ const ReplayPage = () => {
           {totalDistance < 1000
             ? `${totalDistance.toFixed(1)} m`
             : `${(totalDistance / 1000).toFixed(2)} km`}
+           {/* {(() => {
+            const dist = parseFloat(distanceText);
+            return !isNaN(dist) && dist >= 1 ? `(+${Math.trunc(dist)} m)` : null;
+          })()} */}
         </div>
               <Slider
                 className={classes.slider}
@@ -245,12 +251,6 @@ const ReplayPage = () => {
                   <FastForwardIcon />
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds')}
-              </div>
-              <div className={classes.distance}>
-                <Typography variant="subtitle1">Position Distance</Typography>
-                {distanceText && (
-                  <Typography variant="subtitle1">{distanceText} </Typography>
-                )} 
               </div>
             </>
           ) : (

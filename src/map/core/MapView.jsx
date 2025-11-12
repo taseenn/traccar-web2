@@ -147,7 +147,7 @@ const MapView = ({ children }) => {
     const used = data.storageSpace[1];
     const percent = ((used / (free + used)) * 100).toFixed(1);
 
-    return { percent };
+    return {used, free, percent };
   });
 
   map.addControl(storageControl, 'top-right');
